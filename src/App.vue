@@ -12,13 +12,11 @@ import HomePage from "./components/home/HomePage.vue";
 <style lang="scss" scoped>
 @use './style.scss' as *;
 
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+#app {  
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   width: 100%;
-  min-height: 100vh;
-  overflow-x: hidden;
+  min-height: 100vh;  
   overflow-y: auto;
 }
 </style>

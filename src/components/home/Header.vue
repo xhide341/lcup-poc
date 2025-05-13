@@ -2,22 +2,17 @@
 import lcupLogo from '../../assets/lcup-logo.png';
 import { ref, onMounted, onUnmounted } from 'vue';
 
-// Reactive variable to track scroll state
 const isScrolled = ref(false);
 
-// Function to check scroll position and update state
 const checkScroll = () => {
     isScrolled.value = window.scrollY > 20;
 };
 
-// Add event listener when component is mounted
 onMounted(() => {
-    window.addEventListener('scroll', checkScroll);
-    // Initial check
+    window.addEventListener('scroll', checkScroll);    
     checkScroll();
 });
 
-// Clean up when component is unmounted
 onUnmounted(() => {
     window.removeEventListener('scroll', checkScroll);
 });
@@ -26,7 +21,7 @@ onUnmounted(() => {
 <template>
     <header :class="{ 'scrolled': isScrolled }">
         <div class="logo">
-            <img :src="lcupLogo" alt="LCUP Logo" width="75" height="75" />
+            <img :src="lcupLogo" alt="LCUP Logo" width="60" height="60" />
             <div class="logo-text-container">
                 <span>La Consolacion</span>
                 <span>University Philippines</span>
@@ -58,14 +53,13 @@ header {
     left: 0;
     right: 0;
     z-index: 1000;
-    padding: 15px 20px;
+    padding: 0px 20px;
     box-sizing: border-box;
-    width: 100%;    
-    background-color: #003D7C;    
+    width: 100%;            
     gap: 10px;
-    color: white;
+    color: black;
     overflow-x: auto;
-    height: 95px;
+    height: 75px;
     transition: all 0.3s ease;
 }
 
@@ -73,7 +67,7 @@ header {
 header.scrolled {
     padding: 5px 20px;
     height: 65px;
-    background-color: $primary-color;
+    background-color: white;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
@@ -85,8 +79,8 @@ header.scrolled {
 }
 
 .logo img {
-    width: 75px;
-    height: 75px;
+    width: 60px;
+    height: 60px;
     transition: all 0.3s ease;
 }
 
@@ -100,20 +94,20 @@ header.scrolled .logo img {
     flex-direction: column;
     text-align: start;
     justify-content: center;    
-    letter-spacing: 0.05em;
+    letter-spacing: 0.0125em;
     height: 100%;
     line-height: 1.2;
     transition: all 0.3s ease;
 }
 
 .logo-text-container span:first-child {
-    font-size: 1.75em;
+    font-size: 1.5rem;
     font-weight: bold;
     transition: font-size 0.3s ease;
 }
 
 .logo-text-container span:last-child {
-    font-size: 1em;
+    font-size: 1rem;
     transition: font-size 0.3s ease;
 }
 
@@ -141,8 +135,7 @@ nav {
         li {
             a {
                 text-decoration: none;
-                color: white;
-                background-color: rgba(11, 85, 158, 0.95);
+                color: black;
                 padding: 10px 15px;
                 border-radius: 6px;                
                 font-weight: 500;
@@ -159,7 +152,8 @@ button {
     display: flex;
     align-self: center;
     justify-content: center;
-    margin: 0;    
+    margin: 0;
+    background-color: $primary-color;
     height: auto;
     max-height: 50px;
     transition: all 0.3s ease;

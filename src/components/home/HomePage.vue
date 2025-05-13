@@ -1,22 +1,20 @@
 <script setup lang="ts">
 import Header from "./Header.vue";
 import HeroSection from "./HeroSection.vue";
+import ProgramSection from "./ProgramSection.vue";
+import NewsAndBlogs from "./news_and_blogs.vue";
 </script>
 
 <template>
-  <div class="home-page">
+  <body class="home-page">
     <Header />
     <main>
       <HeroSection />
+      <ProgramSection />
+      <NewsAndBlogs />
     </main>
-  </div>
+  </body>
 </template>
 
 <style lang="scss" scoped>
-.home-page {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  width: 100%;
-}
 </style>
