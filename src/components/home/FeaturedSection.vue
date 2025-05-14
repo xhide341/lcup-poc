@@ -236,10 +236,6 @@ const newsItems = ref<NewsItem[]>([
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(7, 63, 119, 0.7);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-    border-radius: 50%;
     cursor: pointer;
 
     svg {

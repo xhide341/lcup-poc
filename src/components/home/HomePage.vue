@@ -4,7 +4,7 @@ import HeroSection from "./HeroSection.vue";
 import ProgramSection from "./ProgramSection.vue";
 import JoinSection from "./JoinSection.vue";
 import FeaturedSection from "./FeaturedSection.vue";
-import UniversityInfo from "./university_info.vue";
+import Footer from "./Footer.vue";
 </script>
 
 <template>
@@ -15,8 +15,8 @@ import UniversityInfo from "./university_info.vue";
       <ProgramSection />
       <JoinSection />
       <FeaturedSection />
-      <UniversityInfo />
     </main>
+    <Footer />
   </body>
 </template>
 

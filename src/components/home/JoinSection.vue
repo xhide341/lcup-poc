@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref } from "vue";
-// use the university example image as a placeholder, since we don't have a student image
 import studentImage from "../../assets/university-example.jpg";
 </script>
 
@@ -9,18 +8,22 @@ import studentImage from "../../assets/university-example.jpg";
     <div class="container">
       <div class="join-content">
         <div class="text-content">
-          <h2>Join the Future of Learning</h2>
+          <h2>Answer the Call to Learn, Lead, and Serve</h2>
           <p class="description">
-            Experience a transformative educational journey designed to empower
-            your success in today's rapidly evolving world. Our innovative
-            programs combine academic excellence with practical skills.
+            Join a faith-centered academic community where knowledge is
+            nurtured, values are lived, and purpose is discovered. Our programs
+            integrate Catholic teachings with practical skills to prepare you
+            for a life of service, leadership, and spiritual growth.
           </p>
-          <button class="view-courses">View Available Courses</button>
+          <button class="view-courses">Explore Our Programs</button>
         </div>
 
         <div class="image-card">
           <div class="image-container">
-            <img :src="studentImage" alt="Student studying" />
+            <img
+              :src="studentImage"
+              alt="Student engaged in study and service"
+            />
           </div>
         </div>
       </div>
