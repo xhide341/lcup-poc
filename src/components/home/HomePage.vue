@@ -2,7 +2,9 @@
 import Header from "./Header.vue";
 import HeroSection from "./HeroSection.vue";
 import ProgramSection from "./ProgramSection.vue";
-import NewsAndBlogs from "./news_and_blogs.vue";
+import JoinSection from "./JoinSection.vue";
+import FeaturedSection from "./FeaturedSection.vue";
+import UniversityInfo from "./university_info.vue";
 </script>
 
 <template>
@@ -11,10 +13,11 @@ import NewsAndBlogs from "./news_and_blogs.vue";
     <main>
       <HeroSection />
       <ProgramSection />
-      <NewsAndBlogs />
+      <JoinSection />
+      <FeaturedSection />
+      <UniversityInfo />
     </main>
   </body>
 </template>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>
