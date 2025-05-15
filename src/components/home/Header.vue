@@ -208,7 +208,7 @@ header.scrolled .logo-text-container span:last-child {
   font-size: 0.8em;
 }
 
-// Desktop navigation
+// desktop navigation
 .desktop-nav {
   display: flex;
   align-items: center;
@@ -234,7 +234,7 @@ header.scrolled .logo-text-container span:last-child {
   }
 }
 
-// Menu icon
+// menu icon
 .menu-icon-container {
   display: none;
   width: 40px;
@@ -318,17 +318,26 @@ header.scrolled .desktop-nav ul {
 
 .desktop-button {
   display: flex;
+  align-items: center;
   align-self: center;
   justify-content: center;
   margin: 0;
   background-color: $primary-color;
-  height: auto;
-  max-height: 50px;
+  height: 40px;
+  padding: 0 24px;
+  max-height: 40px;
+  border: 0;
+  border-radius: 12px;
   transition: all 0.3s ease;
+  color: white;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1;
+  text-align: center;
+  cursor: pointer;
 }
 
 header.scrolled .desktop-button {
-  padding: 0.4em 1em;
   font-size: 0.9em;
 }
 
