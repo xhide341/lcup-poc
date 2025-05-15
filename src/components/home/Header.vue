@@ -324,10 +324,10 @@ header.scrolled .desktop-nav ul {
   margin: 0;
   background-color: $primary-color;
   height: 40px;
-  padding: 0 24px;
+  padding: 0 16px;
   max-height: 40px;
   border: 0;
-  border-radius: 12px;
+  border-radius: 4px;
   transition: all 0.3s ease;
   color: white;
   font-weight: 500;
