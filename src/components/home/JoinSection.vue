@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref } from "vue";
 import studentImage from "../../assets/university-example.jpg";
 </script>
 
@@ -70,6 +69,7 @@ import studentImage from "../../assets/university-example.jpg";
     color: rgba(255, 255, 255, 0.9);
     line-height: 1.6;
     letter-spacing: 0.01em;
+    text-wrap: pretty;
   }
 
   .view-courses {
@@ -120,6 +120,29 @@ import studentImage from "../../assets/university-example.jpg";
       display: block;
       transition: transform 0.5s ease;
     }
+  }
+}
+
+@media (max-width: 1024px) {
+  .join-content {
+    flex-direction: column-reverse;
+    text-align: center;
+    gap: 2rem;
+  }
+
+  .text-content {
+    max-width: 90%;
+    margin: 0 auto;
+
+    .view-courses {
+      align-self: center;
+    }
+  }
+
+  .image-card {
+    width: 75%;
+    max-width: 600px;
+    margin: 0 auto 1rem;
   }
 }
 

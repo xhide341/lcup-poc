@@ -61,7 +61,7 @@ const achievements: Achievement[] = [
     id: 2,
     title: "Top Notchers",
     value: "93%",
-    description: "Passing rate above national average",
+    description: "Above average passing rate",
   },
   {
     id: 3,
@@ -71,9 +71,9 @@ const achievements: Achievement[] = [
   },
   {
     id: 4,
-    title: "Scholarship Grants",
+    title: "Student Grants",
     value: "850+",
-    description: "Awarded to students for academic excellence",
+    description: "Given for academic merit",
   },
 ];
 </script>
@@ -125,7 +125,6 @@ const achievements: Achievement[] = [
         </div>
       </div>
       <div class="partnership-logos">
-        <p>In partnership with</p>
         <div class="logos-row">
           <img
             v-for="(logo, index) in logos"
@@ -134,7 +133,7 @@ const achievements: Achievement[] = [
             alt="Partner Logo"
             width="75"
             height="75"
-            loading="eager"
+            loading="lazy"
           />
         </div>
       </div>
@@ -158,14 +157,8 @@ const achievements: Achievement[] = [
 <style lang="scss" scoped>
 @use "../../style.scss" as *;
 
-// for cut-out
-$radius: 32px;
-$inner-curve-size: 20px;
-$horizontal-offset: 56em;
-$vertical-offset: 12em;
-// values for mask
-$mask-dimension: 2 * $radius;
-$inner-dimension: $inner-curve-size + $radius;
+// Apply default variables (large desktop)
+@include hero-large-desktop;
 
 main {
   position: relative;
@@ -198,89 +191,176 @@ main {
   background-repeat: no-repeat;
   border-radius: $radius;
   overflow: hidden;
+  @include hero-mask;
 
-  mask:
-    calc(100% - #{$inner-dimension} - #{$horizontal-offset})
-      100% /#{$mask-dimension} #{$mask-dimension}
-      radial-gradient(#000 70%, #0000 72%),
-    100%
-      calc(100% - #{$inner-dimension} - #{$vertical-offset}) /#{$mask-dimension}
-      #{$mask-dimension} radial-gradient(#000 70%, #0000 72%),
-    radial-gradient(
-        #{$inner-curve-size} at 100% 100%,
-        #0000 100%,
-        #000 calc(100% + 1px)
-      )
-      calc(-1 *#{$radius} - #{$horizontal-offset})
-      calc(-1 *#{$radius} - #{$vertical-offset}),
-    conic-gradient(
-        from 90deg at calc(100% - #{$radius}) calc(100% - #{$radius}),
-        #0000 25%,
-        #000 0
-      )
-      calc(-1 *#{$inner-dimension} - #{$horizontal-offset}) 0,
-    conic-gradient(
-        from 90deg at calc(100% - #{$radius}) calc(100% - #{$radius}),
-        #0000 25%,
-        #000 0
-      )
-      0 calc(-1 *#{$inner-dimension} - #{$vertical-offset});
-  mask-repeat: no-repeat;
-}
+  .hero-content {
+    max-width: 800px;
+    text-align: left;
+    padding-left: 10%;
 
-.hero-content {
-  max-width: 800px;
-  text-align: left;
-  padding-left: 10%;
+    span {
+      padding: 6px 10px;
+      border-width: 1px;
+      border-style: solid;
+      border-color: white;
+      border-radius: 24px;
+      font-size: 0.75rem;
+      display: inline-block;
+    }
 
-  span {
-    padding: 6px 10px;
-    border-width: 1px;
-    border-style: solid;
-    border-color: white;
-    border-radius: 24px;
-    font-size: 0.75rem;
+    h1 {
+      font-size: 4rem;
+      margin: 0 0 1rem 0;
+    }
+
+    p {
+      font-size: 1.25rem;
+      margin-bottom: 2rem;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 1rem;
+
+      button {
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &.primary {
+          background-color: #ffc107;
+          color: #333;
+          border: none;
+
+          &:hover {
+            background-color: #ffd54f;
+          }
+        }
+
+        &.secondary {
+          background-color: transparent;
+          color: white;
+          border: 2px solid white;
+
+          &:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+          }
+        }
+      }
+    }
   }
 
-  h1 {
-    font-size: 4rem;
-    margin: 0 0 1rem 0;
-  }
+  .announcements-glass {
+    position: absolute;
+    top: 35%;
+    right: 8rem;
+    transform: translateY(-50%);
+    width: 450px;
+    max-height: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border-radius: 16px;
+    padding: 1.5rem 1.5rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    display: flex;
+    flex-direction: column;
 
-  p {
-    font-size: 1.25rem;
-    margin-bottom: 2rem;
-  }
-}
+    h3 {
+      font-size: 1.5rem;
+      position: relative;
+      margin: 0 0 1.5rem 0;
 
-.cta-buttons {
-  display: flex;
-  gap: 1rem;
-
-  button {
-    padding: 0.75rem 1.5rem;
-    font-size: 1rem;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-
-    &.primary {
-      background-color: #ffc107;
-      color: #333;
-      border: none;
-
-      &:hover {
-        background-color: #ffd54f;
+      &:after {
+        content: "";
+        position: absolute;
+        bottom: -8px;
+        left: 0;
+        width: 40px;
+        height: 3px;
+        background-color: #ffc107;
       }
     }
 
-    &.secondary {
-      background-color: transparent;
-      color: white;
-      border: 2px solid white;
+    .announcements-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      cursor: pointer;
+      overflow-y: auto;
+      max-height: calc(100% - 3rem);
 
-      &:hover {
-        background-color: rgba(255, 255, 255, 0.1);
+      .announcement-card {
+        padding: 0.5rem 0.75rem;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+        position: relative;
+
+        &:hover {
+          transform: translateY(-3px);
+          background: rgba(255, 255, 255, 0.15);
+        }
+
+        .arrow-icon {
+          position: absolute;
+          top: 12px;
+          right: 12px;
+          opacity: 0.7;
+          transition: all 0.2s ease;
+        }
+
+        &:hover .arrow-icon {
+          opacity: 1;
+        }
+
+        .announcement-date {
+          font-size: 0.8rem;
+          opacity: 0.8;
+          margin-bottom: 0.125rem;
+        }
+
+        h4 {
+          font-size: 1.1rem;
+          margin: 0 0 0.25rem 0;
+        }
+
+        p {
+          font-size: 0.9rem;
+          margin: 0;
+          opacity: 0.9;
+        }
+      }
+    }
+  }
+
+  .partnership-logos {
+    position: absolute;
+    bottom: 2rem;
+    left: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    z-index: 2;
+
+    .logos-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+
+      img {
+        width: 75px;
+        height: 75px;
+        object-fit: contain;
+        transition: all 0.3s ease;
+
+        &:hover {
+          transform: scale(1.05);
+        }
       }
     }
   }
@@ -292,11 +372,11 @@ main {
   right: 0;
   width: calc(#{$horizontal-offset} + #{$inner-dimension});
   height: calc(#{$inner-curve-size} + #{$vertical-offset} + #{$radius});
-  margin-right: 1em;
   border-top-left-radius: $inner-curve-size;
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 3;
 
   .achievements-wrapper {
     display: flex;
@@ -305,7 +385,7 @@ main {
     gap: 2rem;
     width: 100%;
     height: 100%;
-    padding-right: 1rem;
+    padding-right: 2rem;
 
     .achievement-card {
       background: white;
@@ -343,166 +423,366 @@ main {
   }
 }
 
-.announcements-glass {
-  position: absolute;
-  top: 35%;
-  right: 8rem;
-  transform: translateY(-50%);
-  width: 450px;
-  max-height: 50%;
-  overflow-y: auto;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-radius: 16px;
-  padding: 1.5rem 1.5rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: white;
+@media (max-width: 1440px) {
+  @include hero-desktop;
 
-  h3 {
-    font-size: 1.5rem;
-    position: relative;
-    margin: 0 0 1.5rem 0;
+  .hero-banner {
+    @include hero-mask;
 
-    &:after {
-      content: "";
-      position: absolute;
-      bottom: -8px;
-      left: 0;
-      width: 40px;
-      height: 3px;
-      background-color: #ffc107;
+    .hero-content {
+      span {
+        display: inline-block;
+      }
+
+      h1 {
+        font-size: 3rem;
+      }
+
+      p {
+        font-size: 1rem;
+      }
+    }
+
+    .announcements-glass {
+      padding: 1rem;
+      top: 30%;
+      right: 6rem;
+      width: 400px;
+
+      .announcements-list {
+        max-height: calc(100% - 2.75rem);
+      }
+    }
+
+    .partnership-logos {
+      bottom: 1.5rem;
+      left: 1.5rem;
+
+      .logos-row {
+        img {
+          width: 64px;
+          height: 64px;
+        }
+      }
     }
   }
 
-  .announcements-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    cursor: pointer;
-  }
+  .floating-card {
+    width: calc(#{$horizontal-offset} + #{$inner-dimension});
+    height: calc(#{$inner-curve-size} + #{$vertical-offset} + #{$radius});
+    border-top-left-radius: $inner-curve-size;
 
-  .announcement-card {
-    padding: 0.5rem 0.75rem;
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.1);
-    transition: all 0.3s ease;
-    position: relative;
+    .achievements-wrapper {
+      gap: 1rem;
+      padding-right: 2.125rem;
 
-    &:hover {
-      transform: translateY(-3px);
-      background: rgba(255, 255, 255, 0.15);
-    }
+      .achievement-card {
+        width: 170px;
+        padding: 1.2rem;
 
-    .arrow-icon {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      opacity: 0.7;
-      transition: all 0.2s ease;
-    }
+        .achievement-value {
+          font-size: 2.2rem;
+        }
 
-    &:hover .arrow-icon {
-      opacity: 1;
-    }
+        h4 {
+          font-size: 0.9rem;
+        }
 
-    .announcement-date {
-      font-size: 0.8rem;
-      opacity: 0.8;
-      margin-bottom: 0.125rem;
-    }
-
-    h4 {
-      font-size: 1.1rem;
-      margin: 0 0 0.25rem 0;
-    }
-
-    p {
-      font-size: 0.9rem;
-      margin: 0;
-      opacity: 0.9;
-    }
-  }
-}
-
-.partnership-logos {
-  position: absolute;
-  bottom: 2rem;
-  left: 2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-
-  p {
-    font-size: 0.9rem;
-    margin: 0;
-    opacity: 0.8;
-    font-weight: 500;
-  }
-
-  .logos-row {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-
-    img {
-      width: 75px;
-      height: 75px;
-      object-fit: contain;
-      transition: all 0.3s ease;
-
-      &:hover {
-        transform: scale(1.05);
+        p {
+          font-size: 0.75rem;
+        }
       }
     }
   }
 }
 
-@media (max-width: 768px) {
-  .hero-content {
-    padding-left: 5%;
-    padding-right: 5%;
-  }
+@media (max-width: 1024px) {
+  @include hero-tablet;
 
-  .announcements-glass {
+  .hero-banner {
+    min-height: 80dvh;
+    mask: none;
+    border-radius: $radius;
     position: relative;
-    top: auto;
-    right: auto;
-    transform: none;
-    width: 90%;
-    max-height: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .hero-content {
+      max-width: 700px;
+      text-align: center;
+      padding: 0 2rem;
+      margin: 0 auto;
+      z-index: 2;
+
+      span {
+        margin-bottom: 0.75rem;
+        display: inline-block;
+      }
+
+      h1 {
+        font-size: 2.5rem;
+      }
+
+      p {
+        font-size: 1rem;
+      }
+
+      .cta-buttons {
+        justify-content: center;
+      }
+    }
+
+    .partnership-logos {
+      position: absolute;
+      top: 2rem;
+      right: 2rem;
+      bottom: auto;
+      left: auto;
+
+      .logos-row {
+        img {
+          width: 42px;
+          height: 42px;
+        }
+      }
+    }
+
+    .announcements-glass {
+      display: none;
+    }
   }
 
   .floating-card {
     position: relative;
     width: 100%;
     height: auto;
-    margin: 0;
+    margin-top: -6rem;
     border-radius: 0;
     padding: 2rem 0;
+    border-top-left-radius: 0;
+    z-index: 3;
 
     .achievements-wrapper {
-      flex-direction: column;
-      padding: 0;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
       gap: 1rem;
+      padding: 0 2rem;
+      flex-wrap: nowrap;
+      justify-content: center;
 
       .achievement-card {
-        width: 80%;
+        width: 100%;
+        margin-bottom: 0;
+        padding: 1rem;
+
+        .achievement-value {
+          font-size: 1.8rem;
+        }
+
+        h4 {
+          font-size: 0.8rem;
+        }
+
+        p {
+          font-size: 0.75rem;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-banner {
+    mask: none;
+    border-radius: $radius;
+    min-height: 80dvh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding-top: 12rem;
+
+    .hero-content {
+      padding: 0 1.5rem;
+      text-align: center;
+      max-width: 80%;
+      margin: 0 auto;
+
+      span {
+        margin-bottom: 0.6rem;
+        display: inline-block;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+
+      p {
+        font-size: 0.9rem;
+      }
+
+      .cta-buttons {
+        justify-content: center;
+        flex-direction: row;
+        align-items: center;
+        gap: 0.75rem;
+
+        button {
+          width: 100%;
+          padding: 0.6rem 1.2rem;
+        }
+      }
+    }
+
+    .partnership-logos {
+      position: absolute;
+      top: 1.125rem;
+      right: 1.125rem;
+      margin: 0;
+      align-items: flex-end;
+
+      .logos-row {
+        flex-wrap: nowrap;
+        justify-content: flex-end;
+        overflow-x: visible;
+        padding-bottom: 0.5rem;
+
+        img {
+          width: 42px;
+          height: 42px;
+          min-width: 42px;
+        }
+      }
+    }
+
+    .announcements-glass {
+      display: none;
+    }
+  }
+
+  .floating-card {
+    position: relative;
+    width: 100%;
+    height: auto;
+    margin-top: -6.5rem;
+    border-radius: 0;
+    padding: 1.5rem 0;
+    z-index: 3;
+
+    .achievements-wrapper {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      padding: 0 1rem;
+      justify-content: center;
+
+      .achievement-card {
+        width: 100%;
+        padding: 1rem;
+        margin: 0;
+
+        .achievement-value {
+          font-size: 1.6rem;
+        }
+
+        h4 {
+          font-size: 0.9rem;
+        }
+
+        p {
+          font-size: 0.8rem;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .hero-banner {
+    min-height: 90dvh;
+    padding-top: 8rem;
+    align-items: flex-start;
+    justify-content: flex-start;
+
+    .hero-content {
+      margin-top: 0;
+      padding-top: 0;
+
+      span {
+        margin-bottom: 0.5rem;
+        display: inline-block;
+      }
+
+      h1 {
+        font-size: 1.75rem;
+      }
+
+      p {
+        font-size: 0.85rem;
+      }
+
+      .cta-buttons {
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+
+        button {
+          width: 100%;
+          padding: 0.6rem 1.2rem;
+        }
+      }
+    }
+
+    .partnership-logos {
+      position: absolute;
+      top: 1rem;
+      right: auto;
+      left: 50%;
+      transform: translateX(-50%);
+      margin: 0;
+      align-items: center;
+
+      .logos-row {
+        flex-wrap: nowrap;
+        justify-content: center;
+        gap: 0.5rem;
+        max-width: 180px;
+
+        img {
+          width: 38px;
+          height: 38px;
+          min-width: 38px;
+        }
       }
     }
   }
 
-  .partnership-logos {
-    position: relative;
-    bottom: auto;
-    left: auto;
-    margin-top: 2rem;
-    align-items: center;
+  .floating-card {
+    margin-top: -18rem;
+    padding-top: 2rem;
 
-    .logos-row {
-      flex-wrap: wrap;
-      justify-content: center;
+    .achievements-wrapper {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      padding: 0 1.5rem;
+
+      .achievement-card {
+        padding: 0.8rem;
+
+        .achievement-value {
+          font-size: 1.4rem;
+        }
+
+        h4 {
+          font-size: 0.8rem;
+        }
+
+        p {
+          font-size: 0.7rem;
+        }
+      }
     }
   }
 }

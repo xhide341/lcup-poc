@@ -177,12 +177,47 @@ h2 {
 
 @media (max-width: 768px) {
   .programs-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  .program-card {
+    max-width: 100%;
+    margin: 0;
+  }
+
+  .program-image {
+    height: 180px;
+  }
+
+  .program-content {
+    padding: 1.25rem;
+    gap: 18px;
+
+    .text-group {
+      h3 {
+        font-size: 1.1rem;
+      }
+
+      p {
+        font-size: 0.9rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .programs-grid {
     grid-template-columns: 1fr;
   }
 
   .program-card {
     max-width: 450px;
     margin: 0 auto;
+  }
+
+  .program-image {
+    height: 200px;
   }
 }
 </style>

@@ -1,5 +1,7 @@
 /* 1. Use a more-intuitive box-sizing model */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -22,18 +24,31 @@ body {
 }
 
 /* 5. Improve media defaults */
-img, picture, video, canvas, svg {
+img,
+picture,
+video,
+canvas,
+svg {
   display: block;
   max-width: 100%;
 }
 
 /* 6. Inherit fonts for form controls */
-input, button, textarea, select {
+input,
+button,
+textarea,
+select {
   font: inherit;
 }
 
 /* 7. Avoid text overflows */
-p, h1, h2, h3, h4, h5, h6 {
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   overflow-wrap: break-word;
 }
 
@@ -41,12 +56,18 @@ p, h1, h2, h3, h4, h5, h6 {
 p {
   text-wrap: pretty;
 }
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   text-wrap: balance;
 }
 
 /* 9. Create a root stacking context */
-#root, #__next {
+#root,
+#__next {
   isolation: isolate;
 }
 
@@ -56,11 +77,84 @@ $primary-color: rgba(7, 63, 119, 0.95);
 $body-color: #f8f9fa;
 $section-font: 2.5rem;
 
-// Reset and base styles
-html, body {
+// Hero section cutout variables - DEFAULT VALUES (desktop)
+$radius: 32px;
+$inner-curve-size: 20px;
+$horizontal-offset: 56em;
+$vertical-offset: 12em;
+$mask-dimension: 2 * $radius;
+$inner-dimension: $inner-curve-size + $radius;
+
+// We'll use these mixins in the component instead of media queries for the variables
+@mixin hero-large-desktop {
+  // Default values are already set above, no changes needed
+}
+
+@mixin hero-desktop {
+  // 1440px and below
+  $radius: 28px !global;
+  $inner-curve-size: 20px !global;
+  $horizontal-offset: 45em !global;
+  $vertical-offset: 9.5em !global;
+  $mask-dimension: 2 * $radius !global;
+  $inner-dimension: $inner-curve-size + $radius !global;
+}
+
+@mixin hero-tablet {
+  // 1024px and below
+  $radius: 24px !global;
+  $inner-curve-size: 14px !global;
+  $horizontal-offset: 30em !global;
+  $vertical-offset: 8em !global;
+  $mask-dimension: 2 * $radius !global;
+  $inner-dimension: $inner-curve-size + $radius !global;
+}
+
+@mixin hero-mobile {
+  // 768px and below
+  $radius: 16px !global;
+  $inner-curve-size: 0 !global;
+  $horizontal-offset: 0 !global;
+  $vertical-offset: 0 !global;
+  $mask-dimension: 2 * $radius !global;
+  $inner-dimension: $inner-curve-size + $radius !global;
+}
+
+@mixin hero-mask {
+  mask:
+    calc(100% - #{$inner-dimension} - #{$horizontal-offset})
+      100% /#{$mask-dimension} #{$mask-dimension}
+      radial-gradient(#000 70%, #0000 72%),
+    100%
+      calc(100% - #{$inner-dimension} - #{$vertical-offset}) /#{$mask-dimension}
+      #{$mask-dimension} radial-gradient(#000 70%, #0000 72%),
+    radial-gradient(
+        #{$inner-curve-size} at 100% 100%,
+        #0000 100%,
+        #000 calc(100% + 1px)
+      )
+      calc(-1 *#{$radius} - #{$horizontal-offset})
+      calc(-1 *#{$radius} - #{$vertical-offset}),
+    conic-gradient(
+        from 90deg at calc(100% - #{$radius}) calc(100% - #{$radius}),
+        #0000 25%,
+        #000 0
+      )
+      calc(-1 *#{$inner-dimension} - #{$horizontal-offset}) 0,
+    conic-gradient(
+        from 90deg at calc(100% - #{$radius}) calc(100% - #{$radius}),
+        #0000 25%,
+        #000 0
+      )
+      0 calc(-1 *#{$inner-dimension} - #{$vertical-offset});
+  mask-repeat: no-repeat;
+}
+
+html,
+body {
   padding: 0;
   width: 100%;
-  height: 100%;  
+  height: 100%;
 }
 
 body {
@@ -79,37 +173,4 @@ body {
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -moz-osx-font-smoothing: grayscale;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
 }

@@ -53,6 +53,7 @@ const newsItems = ref<NewsItem[]>([
       </p>
 
       <div class="news-layout">
+        <!-- Small Cards Column -->
         <div class="small-cards-column">
           <div
             v-for="item in newsItems.slice(0, 3)"
@@ -94,6 +95,7 @@ const newsItems = ref<NewsItem[]>([
           </div>
         </div>
 
+        <!-- Large Card Column -->
         <div class="large-card-column">
           <div
             class="news-card large-card"
@@ -143,7 +145,7 @@ const newsItems = ref<NewsItem[]>([
 .featured-news-section {
   padding: 5rem 0;
   background-color: $body-color;
-  max-height: 100dvh;
+  max-height: none;
 }
 
 .container {
@@ -168,32 +170,36 @@ const newsItems = ref<NewsItem[]>([
   margin-bottom: 3rem;
   font-size: 1.1rem;
   color: #555;
+  text-wrap: pretty;
 }
 
 .news-layout {
   text-align: start;
-  display: flex;
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  grid-template-areas: "small large";
   gap: 1.5rem;
   height: 600px;
 }
 
 .small-cards-column {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: repeat(3, 1fr);
   gap: 1.5rem;
-  width: 40%;
-
-  .small-card {
-    flex: 1;
-  }
+  grid-area: small;
 }
 
 .large-card-column {
-  width: 60%;
+  grid-area: large;
+  height: 100%;
+}
 
-  .large-card {
-    height: 100%;
-  }
+.small-card {
+  min-height: 120px;
+}
+
+.large-card {
+  height: 100%;
 }
 
 .news-card {
@@ -206,21 +212,19 @@ const newsItems = ref<NewsItem[]>([
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 
   &:hover {
-    transform: translateY(-5px);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 
     .card-title {
       overflow: visible;
       text-overflow: clip;
-      white-space: normal;
       display: block;
-      line-clamp: unset;
-      -webkit-line-clamp: unset;
+      line-clamp: 2;
+      -webkit-line-clamp: 2;
       max-height: none;
     }
 
     .card-tags {
-      max-height: 100px;
+      max-height: 26px;
       margin-top: 0.75rem;
       opacity: 1;
     }
@@ -247,6 +251,7 @@ const newsItems = ref<NewsItem[]>([
     position: absolute;
     bottom: 0;
     left: 0;
+    text-align: left;
     width: 100%;
     padding: 1.5rem;
     background: linear-gradient(transparent, rgba(7, 63, 119, 0.8));
@@ -258,7 +263,11 @@ const newsItems = ref<NewsItem[]>([
     font-size: 1.25rem;
     font-weight: 600;
     margin: 0;
-    white-space: nowrap;
+    text-wrap: pretty;
+    display: -webkit-box;
+    line-clamp: 2;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
     transition: all 0.3s ease;
@@ -268,41 +277,157 @@ const newsItems = ref<NewsItem[]>([
 
   .card-tags {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     gap: 0.5rem;
     max-height: 0;
     overflow: hidden;
     opacity: 0;
     transition: all 0.3s ease;
+    white-space: nowrap;
+    max-width: 100%;
+    overflow-x: hidden;
 
     .tag {
       font-size: 0.75rem;
-      background: rgba(7, 63, 119, 0.8);
+      background: rgba(255, 255, 255, 0.8);
       backdrop-filter: blur(4px);
       -webkit-backdrop-filter: blur(4px);
       padding: 0.25rem 0.75rem;
+      color: $primary-color;
+      font-weight: 600;
       border-radius: 20px;
+      display: inline-block;
+      white-space: nowrap;
     }
   }
 }
 
 @media (max-width: 768px) {
+  .featured-news-section {
+    padding: 3rem 0;
+  }
+
+  .container {
+    padding: 0 1rem;
+  }
+
   .news-layout {
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-areas:
+      "small1 small2"
+      "small3 large";
     height: auto;
-  }
-
-  .small-cards-column,
-  .large-card-column {
-    width: 100%;
-  }
-
-  .small-cards-column {
     gap: 1rem;
   }
 
+  .small-cards-column {
+    display: contents;
+  }
+
+  .small-card:nth-child(1) {
+    grid-area: small1;
+  }
+
+  .small-card:nth-child(2) {
+    grid-area: small2;
+  }
+
+  .small-card:nth-child(3) {
+    grid-area: small3;
+  }
+
+  .large-card-column {
+    grid-area: large;
+  }
+
+  .small-card,
+  .large-card {
+    height: 200px;
+    min-height: 200px;
+  }
+
   .news-card {
-    height: 250px;
+    margin: 0;
+
+    .card-title {
+      font-size: 1.1rem;
+      display: -webkit-box;
+      line-clamp: 2;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .card-tags {
+      max-height: 26px;
+      margin-top: 0.5rem;
+      opacity: 1;
+      overflow-x: auto;
+      flex-wrap: nowrap;
+      -ms-overflow-style: none; /* IE and Edge */
+      scrollbar-width: none; /* Firefox */
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+
+      .tag {
+        flex-shrink: 0;
+      }
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .featured-news-section {
+    padding: 2rem 0;
+  }
+
+  .section-title {
+    font-size: 2rem;
+  }
+
+  .section-description {
+    font-size: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .news-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "small1"
+      "small2"
+      "small3"
+      "large";
+    gap: 0.8rem;
+  }
+
+  .small-card:nth-child(1) {
+    grid-area: small1;
+  }
+
+  .small-card:nth-child(2) {
+    grid-area: small2;
+  }
+
+  .small-card:nth-child(3) {
+    grid-area: small3;
+  }
+
+  .large-card-column {
+    grid-area: large;
+  }
+
+  .small-card {
+    height: 180px;
+    min-height: 180px;
+  }
+
+  .large-card {
+    height: 240px;
   }
 }
 </style>
