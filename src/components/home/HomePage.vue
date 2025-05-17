@@ -8,16 +8,12 @@ import Footer from "./Footer.vue";
 </script>
 
 <template>
-  <body class="home-page">
-    <Header />
-    <main>
-      <HeroSection />
-      <ProgramSection />
-      <JoinSection />
-      <FeaturedSection />
-    </main>
-    <Footer />
-  </body>
+  <div class="home-page">
+    <HeroSection />
+    <ProgramSection />
+    <JoinSection />
+    <FeaturedSection />
+  </div>
 </template>
 
 <style lang="scss" scoped></style>

@@ -1,9 +1,83 @@
 <script setup lang="ts">
 import lcupLogo from "../../assets/logos/lcup-logo.webp";
+import DropdownIcon from "../../assets/icons/DropdownIcon.vue";
+import HamburgerIcon from "../../assets/icons/HamburgerIcon.vue";
+import CloseIcon from "../../assets/icons/CloseIcon.vue";
 import { ref, onMounted, onUnmounted } from "vue";
+
+const menuItems = [
+  { label: "Home", href: "/" },
+  {
+    label: "About",
+    href: "#",
+    hasDropdown: true,
+    children: [
+      { label: "Mission & Vision", href: "#" },
+      { label: "History", href: "#" },
+      { label: "Leadership", href: "#" },
+      { label: "Facilities", href: "#" },
+    ],
+  },
+  {
+    label: "Admission",
+    href: "#",
+    hasDropdown: true,
+    children: [
+      { label: "Requirements", href: "#" },
+      { label: "Application Process", href: "#" },
+      { label: "Financial Aid", href: "#" },
+      { label: "Scholarships", href: "#" },
+    ],
+  },
+  {
+    label: "Services",
+    href: "#",
+    hasDropdown: true,
+    children: [
+      { label: "Student Services", href: "#" },
+      { label: "Library", href: "#" },
+      { label: "Health Services", href: "#" },
+      { label: "Career Services", href: "#" },
+    ],
+  },
+  {
+    label: "Research",
+    href: "#",
+    hasDropdown: true,
+    children: [
+      { label: "Research Publications", href: "#" },
+      { label: "Research Centers", href: "#" },
+      { label: "Academic Journals", href: "#" },
+      { label: "Research Opportunities", href: "#" },
+    ],
+  },
+  {
+    label: "Integral Evangelization",
+    href: "#",
+    hasDropdown: true,
+    children: [
+      { label: "Community Outreach", href: "#" },
+      { label: "Spiritual Formation", href: "#" },
+      { label: "Service Learning", href: "#" },
+      { label: "Values Integration", href: "#" },
+    ],
+  },
+  {
+    label: "Internationalization",
+    href: "#",
+    hasDropdown: true,
+    children: [
+      { label: "Exchange Programs", href: "#" },
+      { label: "International Partners", href: "#" },
+      { label: "Global Initiatives", href: "#" },
+      { label: "Study Abroad", href: "#" },
+    ],
+  },
+];
 
 const isScrolled = ref(false);
 const isMobileMenuOpen = ref(false);
+const activeDropdown = ref<string | null>(null);
 
 const checkScroll = () => {
   isScrolled.value = window.scrollY > 20;
@@ -13,11 +87,24 @@ const toggleMobileMenu = () => {
   isMobileMenuOpen.value = !isMobileMenuOpen.value;
 };
 
-// Close mobile menu when clicking outside
+const toggleDropdown = (label: string) => {
+  if (activeDropdown.value === label) {
+    activeDropdown.value = null;
+  } else {
+    activeDropdown.value = label;
+  }
+};
+
+// close mobile menu when clicking outside
 const handleClickOutside = (event: MouseEvent) => {
   const target = event.target as HTMLElement;
   const mobileMenu = document.querySelector(".mobile-nav");
   const hamburgerButton = document.querySelector(".hamburger-menu");
+  const dropdownIcon = target.closest(".mobile-dropdown-icon");
+
+  if (dropdownIcon) {
+    return;
+  }
 
   if (
     mobileMenu &&
@@ -27,6 +114,10 @@ const handleClickOutside = (event: MouseEvent) => {
     isMobileMenuOpen.value
   ) {
     isMobileMenuOpen.value = false;
+  }
+
+  if (!target.closest(".nav-item") && !target.closest(".mobile-nav-item")) {
+    activeDropdown.value = null;
   }
 };
 
@@ -43,9 +134,9 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <header :class="{ scrolled: isScrolled }">
+  <header :class="{ scrolled: isScrolled }" role="banner" aria-label="site header">
     <div class="logo">
-      <img :src="lcupLogo" alt="LCUP Logo" width="60" height="60" />
+      <img :src="lcupLogo" alt="LCUP Logo" width="60" height="60" role="img" />
       <div class="logo-text-container">
         <span>La Consolacion</span>
         <span>University Philippines</span>
@@ -53,81 +144,141 @@ onUnmounted(() => {
     </div>
 
     <!-- Desktop Navigation -->
-    <nav class="desktop-nav">
+    <nav class="desktop-nav" aria-label="main navigation">
       <ul>
-        <li><a href="#">Home</a></li>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Admission</a></li>
-        <li><a href="#">Services</a></li>
-        <li><a href="#">Research</a></li>
-        <li><a href="#">Integral Evangelization</a></li>
-        <li><a href="#">Internationalization</a></li>
+        <li
+          v-for="item in menuItems"
+          :key="item.label"
+          class="nav-item"
+          :class="{ 'has-dropdown': item.hasDropdown, active: activeDropdown === item.label }"
+          @click="item.hasDropdown && toggleDropdown(item.label)"
+        >
+          <a
+            :href="item.href"
+            class="nav-link"
+            @click="item.hasDropdown && $event.preventDefault()"
+            :aria-haspopup="item.hasDropdown ? 'true' : undefined"
+            :aria-expanded="
+              item.hasDropdown ? (activeDropdown === item.label ? 'true' : 'false') : undefined
+            "
+            :aria-controls="item.hasDropdown ? `dropdown-${item.label}` : undefined"
+            :tabindex="0"
+          >
+            {{ item.label }}
+            <span v-show="item.hasDropdown" class="dropdown-icon-wrapper">
+              <DropdownIcon class="dropdown-icon" />
+            </span>
+          </a>
+
+          <div
+            v-show="item.hasDropdown"
+            class="dropdown-menu"
+            :class="{ show: activeDropdown === item.label }"
+            :id="`dropdown-${item.label}`"
+            role="menu"
+            :aria-label="`${item.label} submenu`"
+          >
+            <a
+              v-for="child in item.children"
+              :key="child.label"
+              :href="child.href"
+              class="dropdown-item"
+              role="menuitem"
+              tabindex="0"
+            >
+              {{ child.label }}
+            </a>
+          </div>
+        </li>
       </ul>
     </nav>
 
     <!-- Hamburger Menu Icon -->
     <div
-      class="menu-icon-container"
+      class="menu-icon-container hamburger-menu"
       @click="toggleMobileMenu"
       :class="{ 'is-active': isMobileMenuOpen }"
+      role="button"
+      aria-label="toggle mobile menu"
+      tabindex="0"
+      :aria-pressed="isMobileMenuOpen ? 'true' : 'false'"
     >
-      <svg
-        v-if="!isMobileMenuOpen"
-        class="menu-icon"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M3 17H21M3 12H21M3 7H21"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-      </svg>
-      <svg
-        v-else
-        class="menu-icon"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M21 21L12 12M12 12L3 3M12 12L21.0001 3M12 12L3 21.0001"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-      </svg>
+      <HamburgerIcon v-show="!isMobileMenuOpen" />
+      <CloseIcon v-show="isMobileMenuOpen" />
     </div>
 
     <!-- Mobile Navigation -->
-    <div class="mobile-nav" :class="{ 'mobile-nav-open': isMobileMenuOpen }">
+    <div
+      class="mobile-nav"
+      :class="{ 'mobile-nav-open': isMobileMenuOpen }"
+      aria-label="mobile navigation"
+      role="navigation"
+    >
       <ul>
-        <li><a href="#" @click="isMobileMenuOpen = false">Home</a></li>
-        <li><a href="#" @click="isMobileMenuOpen = false">About</a></li>
-        <li><a href="#" @click="isMobileMenuOpen = false">Admission</a></li>
-        <li><a href="#" @click="isMobileMenuOpen = false">Services</a></li>
-        <li><a href="#" @click="isMobileMenuOpen = false">Research</a></li>
-        <li>
-          <a href="#" @click="isMobileMenuOpen = false"
-            >Integral Evangelization</a
+        <li
+          v-for="item in menuItems"
+          :key="item.label"
+          :class="{ 'has-dropdown': item.hasDropdown }"
+        >
+          <div class="mobile-nav-item">
+            <a
+              :href="item.href"
+              @click.stop="
+                item.hasDropdown ? toggleDropdown(item.label) : (isMobileMenuOpen = false)
+              "
+              :aria-haspopup="item.hasDropdown ? 'true' : undefined"
+              :aria-expanded="
+                item.hasDropdown ? (activeDropdown === item.label ? 'true' : 'false') : undefined
+              "
+              :aria-controls="item.hasDropdown ? `mobile-dropdown-${item.label}` : undefined"
+              :tabindex="0"
+            >
+              {{ item.label }}
+            </a>
+            <div
+              v-show="item.hasDropdown"
+              class="mobile-dropdown-icon"
+              :class="{ rotate: activeDropdown === item.label }"
+              @click.stop="toggleDropdown(item.label)"
+              role="button"
+              aria-label="toggle submenu"
+              tabindex="0"
+              :aria-pressed="activeDropdown === item.label ? 'true' : 'false'"
+            >
+              <DropdownIcon />
+            </div>
+          </div>
+
+          <div
+            v-show="item.hasDropdown"
+            class="mobile-dropdown"
+            :class="{ show: activeDropdown === item.label }"
+            :id="`mobile-dropdown-${item.label}`"
+            role="menu"
+            :aria-label="`${item.label} submenu`"
           >
-        </li>
-        <li>
-          <a href="#" @click="isMobileMenuOpen = false">Internationalization</a>
+            <a
+              v-for="child in item.children"
+              :key="child.label"
+              :href="child.href"
+              class="mobile-dropdown-item"
+              @click="isMobileMenuOpen = false"
+              role="menuitem"
+              tabindex="0"
+            >
+              {{ child.label }}
+            </a>
+          </div>
         </li>
       </ul>
-      <button class="student-portal-btn">Student Portal</button>
+      <button class="student-portal-btn" type="button" aria-label="open student portal">
+        Student Portal
+      </button>
     </div>
 
-    <button class="desktop-button">Student Portal</button>
+    <button class="desktop-button" type="button" aria-label="open student portal">
+      Student Portal
+    </button>
   </header>
 </template>
 
@@ -148,9 +299,12 @@ header {
   width: 100%;
   gap: 10px;
   color: $primary-color;
-  overflow-x: auto;
   height: 75px;
   transition: all 0.3s ease;
+  /* important: overflow-x must be 'visible' to allow dropdowns to extend outside the header
+   * when set to 'auto' or 'hidden', child elements (like dropdowns) that extend outside 
+   * the parent container get clipped regardless of z-index settings */
+  overflow-x: visible;
 }
 
 header.scrolled {
@@ -197,6 +351,7 @@ header.scrolled .logo img {
 
 .logo-text-container span:last-child {
   font-size: 1rem;
+  font-weight: 500;
   transition: font-size 0.3s ease;
 }
 
@@ -222,13 +377,90 @@ header.scrolled .logo-text-container span:last-child {
     gap: 2rem;
     transition: all 0.3s ease;
 
-    li {
-      a {
+    li.nav-item {
+      display: flex;
+      align-items: center;
+      position: relative;
+
+      &.has-dropdown {
+        cursor: pointer;
+
+        .nav-link {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+        }
+
+        .dropdown-icon-wrapper {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 16px;
+          height: 16px;
+          transition: transform 0.3s ease;
+        }
+
+        .dropdown-icon {
+          width: 100%;
+          height: 100%;
+
+          :deep(path) {
+            stroke: $primary-color;
+          }
+        }
+
+        &.active .dropdown-icon-wrapper {
+          transform: rotate(180deg);
+        }
+      }
+
+      a.nav-link {
         text-decoration: none;
         color: black;
         padding: 10px 15px;
         border-radius: 6px;
         font-weight: 500;
+        transition: all 0.2s ease;
+
+        &:hover {
+          color: $primary-color;
+        }
+      }
+
+      .dropdown-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 220px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        padding: 8px 0;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(10px);
+        transition: all 0.3s ease;
+        z-index: 1000;
+
+        &.show {
+          opacity: 1;
+          visibility: visible;
+          transform: translateY(0);
+        }
+
+        .dropdown-item {
+          display: block;
+          padding: 10px 16px;
+          color: #333;
+          text-decoration: none;
+          transition: all 0.2s ease;
+          font-size: 0.95rem;
+
+          &:hover {
+            background-color: #f5f5f5;
+            color: $primary-color;
+          }
+        }
       }
     }
   }
@@ -239,17 +471,20 @@ header.scrolled .logo-text-container span:last-child {
   display: none;
   width: 40px;
   height: 40px;
-  border-radius: 4px;
   cursor: pointer;
   padding: 8px;
   align-self: center;
   z-index: 1001;
   box-sizing: border-box;
-  .menu-icon {
+  color: $primary-color;
+  transition: all 0.3s ease;
+
+  :deep(svg) {
     width: 24px;
     height: 24px;
-    color: $primary-color;
+    color: inherit;
     transition: transform 0.3s ease;
+    background-color: transparent;
   }
 }
 
@@ -267,6 +502,7 @@ header.scrolled .logo-text-container span:last-child {
   box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
   z-index: 1000;
   overflow-y: auto;
+  overflow-x: hidden;
 
   &.mobile-nav-open {
     right: 0;
@@ -279,9 +515,18 @@ header.scrolled .logo-text-container span:last-child {
     display: flex;
     flex-direction: column;
     gap: 0;
+    width: 100%;
 
     li {
       border-bottom: 1px solid #eee;
+      width: 100%;
+
+      .mobile-nav-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+      }
 
       a {
         text-decoration: none;
@@ -290,10 +535,69 @@ header.scrolled .logo-text-container span:last-child {
         display: block;
         font-weight: 500;
         transition: all 0.2s ease;
+        flex: 1;
 
         &:hover {
           color: $primary-color;
-          padding-left: 5px;
+        }
+      }
+
+      .mobile-dropdown-icon {
+        width: 32px;
+        height: 32px;
+        min-width: 32px;
+        margin-right: 10px;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+        padding: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        :deep(svg) {
+          width: 100%;
+          height: 100%;
+
+          path {
+            stroke: $primary-color;
+          }
+        }
+
+        &.rotate {
+          transform: rotate(180deg);
+        }
+      }
+
+      .mobile-dropdown {
+        max-height: 0;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        background-color: #f9f9f9;
+        border-radius: 0 0 8px 8px;
+        opacity: 0;
+        transform: translateY(-10px);
+
+        &.show {
+          max-height: 1000px;
+          opacity: 1;
+          transform: translateY(0);
+        }
+
+        .mobile-dropdown-item {
+          padding: 12px 20px;
+          font-size: 0.9rem;
+          display: block;
+          color: #555;
+          text-decoration: none;
+          border-top: 1px solid #eee;
+
+          &:hover {
+            color: $primary-color;
+          }
+
+          &:last-child {
+            border-radius: 0 0 8px 8px;
+          }
         }
       }
     }
@@ -349,6 +653,34 @@ header.scrolled .desktop-button {
   header.scrolled .desktop-nav ul {
     gap: 0.8rem;
   }
+
+  .logo-text-container span:first-child {
+    font-size: 1.3rem;
+  }
+
+  .logo-text-container span:last-child {
+    font-size: 0.9rem;
+  }
+
+  .desktop-nav {
+    ul li.nav-item {
+      a.nav-link {
+        font-size: 0.9rem;
+        padding: 8px 12px;
+      }
+
+      .dropdown-menu .dropdown-item {
+        font-size: 0.85rem;
+        padding: 8px 12px;
+      }
+    }
+  }
+
+  .desktop-button {
+    font-size: 0.9rem;
+    height: 36px;
+    padding: 0 14px;
+  }
 }
 
 @media screen and (max-width: 1024px) {
@@ -368,6 +700,36 @@ header.scrolled .desktop-button {
 
   header {
     justify-content: space-between;
+    background-color: white;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  header {
+    padding: 0 15px;
+  }
+
+  .mobile-nav {
+    max-width: 280px;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .logo img {
+    width: 50px;
+    height: 50px;
+  }
+
+  .logo-text-container span:first-child {
+    font-size: 1.2rem;
+  }
+
+  .logo-text-container span:last-child {
+    font-size: 0.8rem;
+  }
+
+  .mobile-nav {
+    max-width: 100%;
   }
 }
 </style>

@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
+import { motion, useReducedMotion } from "motion-v";
 import "leaflet/dist/leaflet.css";
 import type { Map as LeafletMap } from "leaflet";
 
+const shouldReduceMotion = useReducedMotion();
 let map: LeafletMap | null = null;
 const mapInitialized = ref(false);
 
@@ -18,8 +20,7 @@ function fixLeafletMarker() {
 
   delete L.Icon.Default.prototype._getIconUrl;
   L.Icon.Default.mergeOptions({
-    iconRetinaUrl:
-      "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png",
+    iconRetinaUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png",
     iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
     shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
   });
@@ -45,6 +46,21 @@ const socialLinks = [
     name: "YouTube",
     url: "#",
     icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M21.593 7.203a2.506 2.506 0 0 0-1.762-1.766C18.265 5.007 12 5 12 5s-6.264-.007-7.831.404a2.56 2.56 0 0 0-1.766 1.778c-.413 1.566-.417 4.814-.417 4.814s-.004 3.264.406 4.814c.23.857.905 1.534 1.763 1.765 1.582.43 7.83.437 7.83.437s6.265.007 7.831-.403a2.515 2.515 0 0 0 1.767-1.763c.414-1.565.417-4.812.417-4.812s.02-3.265-.407-4.831zM9.996 15.005l.005-6 5.207 3.005-5.212 2.995z"></path></svg>`,
+  },
+  {
+    name: "GitHub",
+    url: "https://github.com/xhide341/lcup-poc",
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+    <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 
+    9.8 8.205 11.385.6.113.82-.258.82-.577v-2.234c-3.338.724-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.757-1.333-1.757-1.089-.744.084-.729.084-.729 
+    1.205.084 1.84 1.236 1.84 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.775.418-1.305.762-1.605-2.665-.3-5.467-1.332-5.467-5.93 
+    0-1.31.468-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 
+    0 0 1.005-.322 3.3 1.23a11.52 11.52 0 0 1 6 0c2.28-1.552 
+    3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 
+    1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.429.372.81 
+    1.102.81 2.222v3.293c0 .319.21.694.825.576C20.565 
+    22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+  </svg>`,
   },
 ];
 
@@ -94,10 +110,7 @@ const initMap = () => {
         </div>
       `;
 
-      L.marker([coordinates.lat, coordinates.lng])
-        .addTo(map)
-        .bindPopup(popupContent)
-        .openPopup();
+      L.marker([coordinates.lat, coordinates.lng]).addTo(map).bindPopup(popupContent).openPopup();
 
       mapInitialized.value = true;
     }
@@ -130,64 +143,150 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <section class="university-info-section">
+  <section class="university-info-section" aria-label="footer section">
     <div class="container">
       <div class="info-content">
         <div class="info-text">
-          <h2>La Consolacion University Philippines</h2>
-          <p>
-            La Consolacion University Philippines is a Catholic educational
-            institution committed to the total formation of the human person
-            according to the Gospel values of faith, hope, and love. Through
-            quality education, we aim to develop competent and compassionate
-            professionals who will contribute to nation-building and the global
-            community.
-          </p>
+          <motion.h2
+            :initial="shouldReduceMotion ? false : { opacity: 0, y: 30 }"
+            :whileInView="shouldReduceMotion ? undefined : { opacity: 1, y: 0 }"
+            :transition="shouldReduceMotion ? {} : { duration: 0.7 }"
+            :inViewOptions="{ once: true }"
+            id="footer-heading"
+          >
+            La Consolacion University Philippines
+          </motion.h2>
+
+          <motion.p
+            :initial="shouldReduceMotion ? false : { opacity: 0, y: 30 }"
+            :whileInView="shouldReduceMotion ? undefined : { opacity: 1, y: 0 }"
+            :transition="shouldReduceMotion ? {} : { duration: 0.7, delay: 0.2 }"
+            :inViewOptions="{ once: true }"
+          >
+            La Consolacion University Philippines is a Catholic educational institution committed to
+            the total formation of the human person according to the Gospel values of faith, hope,
+            and love. Through quality education, we aim to develop competent and compassionate
+            professionals who will contribute to nation-building and the global community.
+          </motion.p>
+
+          <motion.div
+            :initial="shouldReduceMotion ? false : { opacity: 0, y: 20 }"
+            :whileInView="shouldReduceMotion ? undefined : { opacity: 1, y: 0 }"
+            :transition="shouldReduceMotion ? {} : { duration: 0.6, delay: 0.3 }"
+            :inViewOptions="{ once: true }"
+            class="disclaimer-section disclaimer-desktop"
+            role="contentinfo"
+            aria-label="copyright and credits"
+          >
+            <p>
+              © {{ new Date().getFullYear() }} La Consolacion University Philippines. All Rights
+              Reserved.
+            </p>
+            <p class="credits">
+              Website by <a href="https://github.com/xhide341/lcup-poc" target="_blank">xhide341</a>
+            </p>
+          </motion.div>
         </div>
 
         <div class="info-contact">
-          <div class="map-container">
+          <motion.div
+            :initial="shouldReduceMotion ? false : { opacity: 0, y: 30 }"
+            :whileInView="shouldReduceMotion ? undefined : { opacity: 1, y: 0 }"
+            :transition="shouldReduceMotion ? {} : { duration: 0.8, delay: 0.2 }"
+            :inViewOptions="{ once: true }"
+            class="map-container"
+            role="region"
+            aria-label="university location map"
+          >
             <div id="leaflet-map" class="map-placeholder">
-              <!-- This will be replaced with Leaflet map -->
               <div v-if="!mapInitialized" class="map-text">
                 <span>Loading Map...</span>
               </div>
             </div>
-          </div>
+          </motion.div>
 
           <div class="contact-details">
-            <div class="address">
+            <motion.div
+              :initial="shouldReduceMotion ? false : { opacity: 0, y: 20 }"
+              :whileInView="shouldReduceMotion ? undefined : { opacity: 1, y: 0 }"
+              :transition="shouldReduceMotion ? {} : { duration: 0.6, delay: 0.3 }"
+              :inViewOptions="{ once: true }"
+              class="address"
+              role="region"
+              aria-label="university address"
+            >
               <h3>Location</h3>
               <p>
-                Valenzuela St., Capitol View Park Subdivision, Bulihan, City of
-                Malolos, Bulacan 3000, Philippines
+                Valenzuela St., Capitol View Park Subdivision, Bulihan, City of Malolos, Bulacan
+                3000, Philippines
               </p>
-            </div>
+            </motion.div>
 
-            <div class="phone">
+            <motion.div
+              :initial="shouldReduceMotion ? false : { opacity: 0, y: 20 }"
+              :whileInView="shouldReduceMotion ? undefined : { opacity: 1, y: 0 }"
+              :transition="shouldReduceMotion ? {} : { duration: 0.6, delay: 0.4 }"
+              :inViewOptions="{ once: true }"
+              class="phone"
+              role="region"
+              aria-label="university contact number"
+            >
               <h3>Contact</h3>
               <p>+63 919 002 7151</p>
-            </div>
+            </motion.div>
 
-            <div class="social-links">
+            <motion.div
+              :initial="shouldReduceMotion ? false : { opacity: 0, y: 20 }"
+              :whileInView="shouldReduceMotion ? undefined : { opacity: 1, y: 0 }"
+              :transition="shouldReduceMotion ? {} : { duration: 0.6, delay: 0.5 }"
+              :inViewOptions="{ once: true }"
+              class="social-links"
+              role="region"
+              aria-label="social media links"
+            >
               <h3>Connect With Us</h3>
               <div class="social-icons">
-                <a
-                  v-for="link in socialLinks"
+                <motion.a
+                  v-for="(link, index) in socialLinks"
                   :key="link.name"
+                  :initial="shouldReduceMotion ? false : { opacity: 0, y: 20 }"
+                  :whileInView="shouldReduceMotion ? undefined : { opacity: 1, y: 0 }"
+                  :transition="
+                    shouldReduceMotion ? {} : { duration: 0.5, delay: 0.6 + index * 0.1 }
+                  "
+                  :inViewOptions="{ once: true }"
                   :href="link.url"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="social-icon"
                   :title="link.name"
-                >
-                  <span v-html="link.icon"></span>
-                </a>
+                  target="_blank"
+                  class="social-icon"
+                  v-html="link.icon"
+                  :aria-label="link.name"
+                  tabindex="0"
+                ></motion.a>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </div>
+
+      <!-- Mobile disclaimer section -->
+      <motion.div
+        :initial="shouldReduceMotion ? false : { opacity: 0, y: 20 }"
+        :whileInView="shouldReduceMotion ? undefined : { opacity: 1, y: 0 }"
+        :transition="shouldReduceMotion ? {} : { duration: 0.6, delay: 0.5 }"
+        :inViewOptions="{ once: true }"
+        class="disclaimer-section disclaimer-mobile"
+        role="contentinfo"
+        aria-label="copyright and credits"
+      >
+        <p>
+          © {{ new Date().getFullYear() }} La Consolacion University Philippines. All Rights
+          Reserved.
+        </p>
+        <p class="credits">
+          Website by <a href="https://github.com/xhide341/lcup-poc" target="_blank">xhide341</a>
+        </p>
+      </motion.div>
     </div>
   </section>
 </template>
@@ -197,111 +296,268 @@ onUnmounted(() => {
 @use "sass:color";
 
 .university-info-section {
-  padding: 4rem 0;
+  padding: 5rem 2rem;
   background-color: #f5f5f5;
   border-top: 1px solid #e0e0e0;
-}
 
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 2rem;
-}
-
-.info-content {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 3rem;
-
-  .info-text {
-    flex: 1;
-    min-width: 300px;
-
-    h2 {
-      color: $primary-color;
-      font-size: 2rem;
-      margin-bottom: 1.5rem;
-    }
-
-    p {
-      font-size: 1rem;
-      line-height: 1.6;
-      color: #555;
-    }
+  @media (max-width: 768px) {
+    padding: 3rem 1rem 1rem 1rem;
   }
 
-  .info-contact {
-    flex: 1;
-    min-width: 300px;
+  @media (max-width: 576px) {
+    padding: 2rem 1rem 1rem 1rem;
+  }
 
-    .map-container {
-      margin-bottom: 1.5rem;
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
 
-      .map-placeholder {
-        width: 100%;
-        height: 250px;
-        background-color: #e9e9e9;
-        border-radius: 8px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #888;
-        font-size: 1.2rem;
-        border: 1px solid #ddd;
-        overflow: hidden;
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    .info-content {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 3rem;
 
-        .map-text {
-          font-size: 0.9rem;
-          color: #888;
+      .info-text {
+        flex: 1;
+        min-width: 300px;
+
+        h2 {
+          text-align: left;
+          font-size: $section-font;
+          color: $primary-color;
+          margin-bottom: 1.5rem;
+
+          @media (max-width: 1024px) {
+            font-size: 2rem;
+          }
+
+          @media (max-width: 768px) {
+            text-align: center;
+            font-size: 1.875rem;
+          }
+
+          @media (max-width: 576px) {
+            font-size: 1.5rem;
+          }
         }
-      }
-    }
 
-    .contact-details {
-      h3 {
-        color: $primary-color;
-        font-size: 1.2rem;
-        margin-bottom: 0.5rem;
-      }
-
-      .address,
-      .phone {
-        margin-bottom: 1.5rem;
-
-        p {
-          font-size: 0.95rem;
-          line-height: 1.5;
+        // Main description paragraph
+        > p {
+          font-size: 1.1rem;
+          line-height: 1.6;
+          text-align: justify;
           color: #555;
+          padding-right: 2.5rem;
+
+          @media (max-width: 1024px) {
+            padding-right: 0;
+            font-size: 1rem;
+          }
+          @media (max-width: 576px) {
+            font-size: 0.875rem;
+          }
+        }
+
+        .disclaimer-section {
+          &.disclaimer-desktop {
+            display: block;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #eaeaea;
+            text-align: left;
+
+            p {
+              font-size: 0.9rem;
+              color: #777;
+              margin: 0.25rem 0;
+
+              &.credits {
+                font-size: 0.85rem;
+                color: #999;
+                margin-top: 0.5rem;
+
+                a {
+                  color: $primary-color;
+                  text-decoration: none;
+                  font-weight: 500;
+
+                  &:hover {
+                    text-decoration: underline;
+                  }
+                }
+              }
+            }
+            // hide desktop version on mobile
+            @media (max-width: 768px) {
+              display: none;
+            }
+          }
         }
       }
 
-      .social-links {
-        .social-icons {
-          display: flex;
-          gap: 1rem;
-          margin-top: 0.75rem;
+      .info-contact {
+        flex: 1;
+        min-width: 300px;
 
-          .social-icon {
+        @media (max-width: 768px) {
+          margin-top: 2rem;
+        }
+
+        .map-container {
+          margin-bottom: 1.5rem;
+          .map-placeholder {
+            width: 100%;
+            height: 250px;
+            background-color: #e9e9e9;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: $primary-color;
-            color: white;
-            transition: all 0.2s ease;
+            color: #888;
+            font-size: 1.2rem;
+            border: 1px solid #ddd;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 
-            &:hover {
-              transform: translateY(-3px);
-              background-color: color.adjust($primary-color, $lightness: -10%);
+            .map-text {
+              font-size: 0.9rem;
+              color: #888;
             }
+          }
+        }
 
-            svg {
-              width: 20px;
-              height: 20px;
+        .contact-details {
+          h3 {
+            color: $primary-color;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+          }
+
+          .address,
+          .phone {
+            margin-bottom: 1.5rem;
+
+            p {
+              font-size: 0.95rem;
+              line-height: 1.5;
+              color: #555;
             }
+          }
+
+          .social-links {
+            .social-icons {
+              display: flex;
+              gap: 1rem;
+              margin-top: 0.75rem;
+
+              .social-icon {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                background-color: $primary-color;
+                color: white;
+                transition: all 0.2s ease;
+
+                &:hover {
+                  transform: translateY(-3px);
+                  background-color: color.adjust($primary-color, $lightness: -10%);
+                }
+
+                :deep(svg) {
+                  width: 20px;
+                  height: 20px;
+                  fill: currentColor;
+                }
+              }
+            }
+          }
+
+          @media (max-width: 768px) {
+            text-align: center;
+            max-width: 50%;
+            margin-left: auto;
+            margin-right: auto;
+
+            .social-icons {
+              justify-content: center;
+            }
+          }
+
+          @media (max-width: 576px) {
+            max-width: 100%;
+          }
+        }
+      }
+
+      @media (max-width: 768px) {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 0;
+
+        .info-text,
+        .info-contact {
+          min-width: 50%;
+        }
+      }
+
+      @media (max-width: 576px) {
+        .info-text,
+        .info-contact {
+          min-width: 100%;
+        }
+      }
+    }
+
+    .disclaimer-mobile {
+      display: none;
+
+      // show on mobile
+      @media (max-width: 768px) {
+        display: block;
+        margin-top: 2.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #eaeaea;
+        text-align: center;
+
+        p {
+          font-size: 0.9rem;
+          color: #777;
+          margin: 0.5rem 0;
+
+          &.credits {
+            font-size: 0.85rem;
+            color: #999;
+            margin-top: 1rem;
+          }
+        }
+
+        a {
+          color: $primary-color;
+          text-decoration: none;
+          font-weight: 500;
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+
+      @media (max-width: 576px) {
+        margin-top: 1.5rem;
+        padding-top: 1rem;
+
+        p {
+          font-size: 0.8rem;
+          margin: 0.25rem 0;
+
+          &.credits {
+            font-size: 0.75rem;
+            margin-top: 0.5rem;
           }
         }
       }
@@ -309,19 +565,7 @@ onUnmounted(() => {
   }
 }
 
-@media (max-width: 768px) {
-  .info-content {
-    flex-direction: column;
-    gap: 2rem;
-
-    .info-text,
-    .info-contact {
-      min-width: 100%;
-    }
-  }
-}
-
-/* Global styles for Leaflet components - these will apply outside the component scope */
+// global styles for leaflet components
 :global(.map-popup h4) {
   color: $primary-color;
   font-size: 1rem;
@@ -356,7 +600,6 @@ onUnmounted(() => {
   background-color: white;
 }
 
-/* Make attribution control more minimal */
 :global(.leaflet-control-attribution) {
   background-color: rgba(255, 255, 255, 0.4) !important;
   padding: 2px 4px !important;

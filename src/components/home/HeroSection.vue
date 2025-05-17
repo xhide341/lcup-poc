@@ -1,10 +1,15 @@
 <script setup lang="ts">
+import { motion, useReducedMotion } from "motion-v";
 import npcLogo from "../../assets/logos/npc-logo.webp";
 import iso9001Logo from "../../assets/logos/iso9001-logo.webp";
 import depedLogo from "../../assets/logos/deped-logo.webp";
 import chedLogo from "../../assets/logos/ched-logo.webp";
 import pacucoaLogo from "../../assets/logos/pacucoa-logo.webp";
 import bagongPilipinasLogo from "../../assets/logos/bagong-pilipinas-logo.webp";
+import heroBgDesktop from "../../assets/backgrounds/university-people.webp";
+import { ref, onMounted } from "vue";
+
+const shouldReduceMotion = useReducedMotion();
 
 interface Announcement {
   id: number;
@@ -20,14 +25,7 @@ interface Achievement {
   description: string;
 }
 
-const logos = [
-  npcLogo,
-  iso9001Logo,
-  depedLogo,
-  chedLogo,
-  pacucoaLogo,
-  bagongPilipinasLogo,
-];
+const logos = [npcLogo, iso9001Logo, depedLogo, chedLogo, pacucoaLogo, bagongPilipinasLogo];
 
 const announcements: Announcement[] = [
   {
@@ -76,30 +74,49 @@ const achievements: Achievement[] = [
     description: "Given for academic merit",
   },
 ];
+
+const isImgLoaded = ref(false);
+const heroImgLoaded = () => {
+  isImgLoaded.value = true;
+};
+
+onMounted(() => {
+  // Preload the hero background image
+  const img = new Image();
+  img.src = heroBgDesktop;
+  img.onload = heroImgLoaded;
+
+  // If image is already cached, it might be loaded immediately
+  if (img.complete) {
+    heroImgLoaded();
+  }
+});
 </script>
 
 <template>
-  <main>
-    <div class="hero-banner">
+  <main id="main-content" tabindex="-1" aria-label="main content area">
+    <div class="hero-banner" role="region" aria-label="hero banner">
       <div class="hero-content">
-        <span>Proof of Concept</span>
+        <span id="poc-badge">Proof of Concept</span>
         <h1>Transforming Lives Through Education</h1>
-        <p>
-          Empowering students with values, knowledge, and skills for a better
-          future
-        </p>
+        <p>Empowering students with values, knowledge, and skills for a better future</p>
         <div class="cta-buttons">
-          <button class="primary">Enroll Now</button>
-          <button class="secondary">Enter Student Portal</button>
+          <button class="primary" type="button" aria-label="enroll now">Enroll Now</button>
+          <button class="secondary" type="button" aria-label="enter student portal">
+            Enter Student Portal
+          </button>
         </div>
       </div>
-      <div class="announcements-glass">
-        <h3>Latest Announcements</h3>
-        <div class="announcements-list">
+      <div class="announcements-glass" role="region" aria-label="latest announcements">
+        <h3 id="announcements-heading">Latest Announcements</h3>
+        <div class="announcements-list" role="list" aria-labelledby="announcements-heading">
           <div
             v-for="announcement in announcements"
             :key="announcement.id"
             class="announcement-card"
+            role="listitem"
+            tabindex="0"
+            :aria-label="`${announcement.title}, ${announcement.date}. ${announcement.content}`"
           >
             <div class="announcement-date">{{ announcement.date }}</div>
             <h4>{{ announcement.title }}</h4>
@@ -113,6 +130,9 @@ const achievements: Achievement[] = [
                 stroke="currentColor"
                 width="16"
                 height="16"
+                aria-hidden="true"
+                focusable="false"
+                role="img"
               >
                 <path
                   stroke-linecap="round"
@@ -124,31 +144,43 @@ const achievements: Achievement[] = [
           </div>
         </div>
       </div>
-      <div class="partnership-logos">
+      <div class="partnership-logos" role="region" aria-label="partnership logos">
         <div class="logos-row">
-          <img
+          <motion.img
             v-for="(logo, index) in logos"
             :key="index"
             :src="logo"
-            alt="Partner Logo"
+            :alt="`partner logo ${index + 1}`"
             width="75"
             height="75"
             loading="lazy"
+            :initial="shouldReduceMotion ? {} : { opacity: 0, scale: 0.9 }"
+            :whileInView="shouldReduceMotion ? {} : { opacity: 1, scale: 1 }"
+            :transition="shouldReduceMotion ? {} : { duration: 0.4, delay: index * 0.1 }"
+            :inViewOptions="{ once: true }"
+            role="img"
+            aria-label="partner logo"
           />
         </div>
       </div>
     </div>
-    <div class="floating-card">
+    <div class="floating-card" role="region" aria-label="university achievements">
       <div class="achievements-wrapper">
-        <div
-          v-for="achievement in achievements"
+        <motion.div
+          v-for="(achievement, index) in achievements"
           :key="achievement.id"
+          :initial="shouldReduceMotion ? false : { opacity: 0, y: 30 }"
+          :whileInView="shouldReduceMotion ? undefined : { opacity: 1, y: 0 }"
+          :transition="shouldReduceMotion ? {} : { duration: 0.3, delay: 0.6 + index * 0.15 }"
+          :inViewOptions="{ once: true }"
           class="achievement-card"
+          tabindex="0"
+          :aria-label="`${achievement.title}, ${achievement.value}. ${achievement.description}`"
         >
           <div class="achievement-value">{{ achievement.value }}</div>
           <h4>{{ achievement.title }}</h4>
           <p>{{ achievement.description }}</p>
-        </div>
+        </motion.div>
       </div>
     </div>
   </main>
@@ -156,8 +188,6 @@ const achievements: Achievement[] = [
 
 <style lang="scss" scoped>
 @use "../../style.scss" as *;
-
-// Apply default variables (large desktop)
 @include hero-large-desktop;
 
 main {
@@ -185,15 +215,18 @@ main {
   color: white;
   background-image:
     linear-gradient(rgba($primary-color, 0.85), rgba($primary-color, 0.75)),
-    url("../../assets/university-example.jpg");
+    url("../../assets/backgrounds/university-people.webp");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   border-radius: $radius;
   overflow: hidden;
   @include hero-mask;
+  transition: background-image 0.5s ease-in-out;
 
   .hero-content {
+    position: relative;
+    z-index: 2;
     max-width: 800px;
     text-align: left;
     padding-left: 10%;
@@ -224,6 +257,7 @@ main {
 
       button {
         padding: 0.75rem 1.5rem;
+        font-weight: 500;
         font-size: 1rem;
         border-radius: 4px;
         cursor: pointer;
@@ -416,8 +450,18 @@ main {
 
       p {
         font-size: 0.8rem;
+        padding: 0px 2px;
         margin: 0;
         color: #666;
+        height: 2.4em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        width: 100%;
+        line-height: 1.2em;
       }
     }
   }
@@ -615,7 +659,7 @@ main {
       }
 
       h1 {
-        font-size: 2rem;
+        font-size: 2.25rem;
       }
 
       p {
@@ -769,6 +813,7 @@ main {
       padding: 0 1.5rem;
 
       .achievement-card {
+        min-height: 125px;
         padding: 0.8rem;
 
         .achievement-value {
