@@ -124,30 +124,15 @@ $inner-dimension: $inner-curve-size + $radius;
 
 @mixin hero-mask {
   mask:
-    calc(100% - #{$inner-dimension} - #{$horizontal-offset})
-      100% /#{$mask-dimension} #{$mask-dimension}
-      radial-gradient(#000 70%, #0000 72%),
-    100%
-      calc(100% - #{$inner-dimension} - #{$vertical-offset}) /#{$mask-dimension}
+    calc(100% - #{$inner-dimension} - #{$horizontal-offset}) 100% /#{$mask-dimension}
       #{$mask-dimension} radial-gradient(#000 70%, #0000 72%),
-    radial-gradient(
-        #{$inner-curve-size} at 100% 100%,
-        #0000 100%,
-        #000 calc(100% + 1px)
-      )
-      calc(-1 *#{$radius} - #{$horizontal-offset})
-      calc(-1 *#{$radius} - #{$vertical-offset}),
-    conic-gradient(
-        from 90deg at calc(100% - #{$radius}) calc(100% - #{$radius}),
-        #0000 25%,
-        #000 0
-      )
+    100% calc(100% - #{$inner-dimension} - #{$vertical-offset}) /#{$mask-dimension}
+      #{$mask-dimension} radial-gradient(#000 70%, #0000 72%),
+    radial-gradient(#{$inner-curve-size} at 100% 100%, #0000 100%, #000 calc(100% + 1px))
+      calc(-1 *#{$radius} - #{$horizontal-offset}) calc(-1 *#{$radius} - #{$vertical-offset}),
+    conic-gradient(from 90deg at calc(100% - #{$radius}) calc(100% - #{$radius}), #0000 25%, #000 0)
       calc(-1 *#{$inner-dimension} - #{$horizontal-offset}) 0,
-    conic-gradient(
-        from 90deg at calc(100% - #{$radius}) calc(100% - #{$radius}),
-        #0000 25%,
-        #000 0
-      )
+    conic-gradient(from 90deg at calc(100% - #{$radius}) calc(100% - #{$radius}), #0000 25%, #000 0)
       0 calc(-1 *#{$inner-dimension} - #{$vertical-offset});
   mask-repeat: no-repeat;
 }

@@ -7,7 +7,8 @@ import chedLogo from "../../assets/logos/ched-logo.webp";
 import pacucoaLogo from "../../assets/logos/pacucoa-logo.webp";
 import bagongPilipinasLogo from "../../assets/logos/bagong-pilipinas-logo.webp";
 import heroBgDesktop from "../../assets/backgrounds/university-people.webp";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
+import AchievementsCard from "./AchievementsCard.vue";
 
 const shouldReduceMotion = useReducedMotion();
 
@@ -69,15 +70,21 @@ const achievements: Achievement[] = [
   },
   {
     id: 4,
-    title: "Student Grants",
+    title: "Scholarship",
     value: "850+",
-    description: "Given for academic merit",
+    description: "Awarded academic merit",
   },
 ];
 
 const isImgLoaded = ref(false);
 const heroImgLoaded = () => {
   isImgLoaded.value = true;
+};
+
+const isMobile = ref(false);
+const checkMobile = () => {
+  // Using 576px as the breakpoint for the swiper
+  isMobile.value = window.innerWidth <= 576;
 };
 
 onMounted(() => {
@@ -90,6 +97,15 @@ onMounted(() => {
   if (img.complete) {
     heroImgLoaded();
   }
+
+  // Check mobile on mount and on resize
+  checkMobile();
+  window.addEventListener("resize", checkMobile);
+});
+
+onUnmounted(() => {
+  // Remove resize listener when component is unmounted
+  window.removeEventListener("resize", checkMobile);
 });
 </script>
 
@@ -165,7 +181,7 @@ onMounted(() => {
       </div>
     </div>
     <div class="floating-card" role="region" aria-label="university achievements">
-      <div class="achievements-wrapper">
+      <div class="achievements-wrapper" v-if="!isMobile">
         <motion.div
           v-for="(achievement, index) in achievements"
           :key="achievement.id"
@@ -182,6 +198,7 @@ onMounted(() => {
           <p>{{ achievement.description }}</p>
         </motion.div>
       </div>
+      <AchievementsCard v-if="isMobile" :achievements="achievements" />
     </div>
   </main>
 </template>
@@ -192,6 +209,7 @@ onMounted(() => {
 
 main {
   position: relative;
+  background-color: $body-color;
   flex: 1;
   max-width: 100dvw;
   display: flex;
@@ -515,6 +533,7 @@ main {
     width: calc(#{$horizontal-offset} + #{$inner-dimension});
     height: calc(#{$inner-curve-size} + #{$vertical-offset} + #{$radius});
     border-top-left-radius: $inner-curve-size;
+    overflow: clip;
 
     .achievements-wrapper {
       gap: 1rem;
@@ -544,7 +563,7 @@ main {
   @include hero-tablet;
 
   .hero-banner {
-    min-height: 80dvh;
+    min-height: 88dvh;
     mask: none;
     border-radius: $radius;
     position: relative;
@@ -552,6 +571,7 @@ main {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    padding-bottom: 2rem;
 
     .hero-content {
       max-width: 700px;
@@ -599,26 +619,26 @@ main {
   }
 
   .floating-card {
-    position: relative;
     width: 100%;
     height: auto;
-    margin-top: -6rem;
     border-radius: 0;
-    padding: 2rem 0;
     border-top-left-radius: 0;
-    z-index: 3;
+    z-index: 2;
+    margin-top: 0;
+    padding-top: 0;
+    padding-bottom: 1rem;
 
     .achievements-wrapper {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 1rem;
-      padding: 0 2rem;
+      padding: 0 1.875rem;
       flex-wrap: nowrap;
       justify-content: center;
 
       .achievement-card {
+        box-shadow: none;
         width: 100%;
-        margin-bottom: 0;
         padding: 1rem;
 
         .achievement-value {
@@ -641,7 +661,6 @@ main {
   .hero-banner {
     mask: none;
     border-radius: $radius;
-    min-height: 80dvh;
     display: flex;
     align-items: flex-start;
     justify-content: flex-start;
@@ -650,7 +669,7 @@ main {
     .hero-content {
       padding: 0 1.5rem;
       text-align: center;
-      max-width: 80%;
+      max-width: 90%;
       margin: 0 auto;
 
       span {
@@ -706,24 +725,23 @@ main {
   }
 
   .floating-card {
-    position: relative;
+    position: absolute;
     width: 100%;
     height: auto;
-    margin-top: -6.5rem;
     border-radius: 0;
-    padding: 1.5rem 0;
-    z-index: 3;
+    border-top-left-radius: 0;
+    z-index: 2;
+    margin-top: 0;
+    padding: 0 1.25rem 1rem 1.25rem;
 
     .achievements-wrapper {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 1rem;
-      padding: 0 1rem;
+      gap: 0.875rem;
+      padding: 0;
       justify-content: center;
 
       .achievement-card {
-        width: 100%;
-        padding: 1rem;
         margin: 0;
 
         .achievement-value {
@@ -731,23 +749,32 @@ main {
         }
 
         h4 {
-          font-size: 0.9rem;
+          font-size: 0.8rem;
         }
 
         p {
-          font-size: 0.8rem;
+          font-size: 0.7rem;
         }
       }
+    }
+
+    /* hide swiper on this breakpoint */
+    .swiper {
+      display: none;
     }
   }
 }
 
 @media (max-width: 576px) {
   .hero-banner {
-    min-height: 90dvh;
-    padding-top: 8rem;
-    align-items: flex-start;
-    justify-content: flex-start;
+    min-height: 88dvh;
+    height: 100%;
+    flex-direction: column;
+    padding-top: 6rem;
+    padding-bottom: 1.5rem;
+    align-items: center;
+    justify-content: space-between;
+    overflow: visible;
 
     .hero-content {
       margin-top: 0;
@@ -804,29 +831,43 @@ main {
   }
 
   .floating-card {
-    margin-top: -18rem;
-    padding-top: 2rem;
+    position: absolute;
+    bottom: 1rem;
+    left: 0;
+    width: 100%;
+    height: auto;
+    padding: 1rem 0 0 0;
+    display: block;
 
     .achievements-wrapper {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1rem;
-      padding: 0 1.5rem;
+      display: none;
+    }
 
-      .achievement-card {
-        min-height: 125px;
-        padding: 0.8rem;
+    /* styles for the AchievementsCard component (Swiper) on smallest mobile */
+    .swiper {
+      display: block;
+      width: 100%;
+    }
 
-        .achievement-value {
-          font-size: 1.4rem;
-        }
+    .swiper-slide {
+      display: flex;
+      justify-content: center;
+    }
 
-        h4 {
-          font-size: 0.8rem;
-        }
+    .achievement-card {
+      display: block;
+      padding: 0;
 
-        p {
-          font-size: 0.7rem;
-        }
+      .achievement-value {
+        font-size: 1.4rem;
+      }
+
+      h4 {
+        font-size: 0.8rem;
+      }
+
+      p {
+        font-size: 0.7rem;
       }
     }
   }

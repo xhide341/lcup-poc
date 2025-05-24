@@ -143,7 +143,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <section class="university-info-section" aria-label="footer section">
+  <footer class="university-info-section" aria-label="footer section">
     <div class="container">
       <div class="info-content">
         <div class="info-text">
@@ -288,7 +288,7 @@ onUnmounted(() => {
         </p>
       </motion.div>
     </div>
-  </section>
+  </footer>
 </template>
 
 <style lang="scss" scoped>
