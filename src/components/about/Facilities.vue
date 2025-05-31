@@ -11,9 +11,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-// no script needed for static content
-</script>
+<script setup lang="ts"></script>
 
 <style scoped>
 .about-card {

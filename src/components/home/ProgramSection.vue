@@ -199,7 +199,6 @@ const programs = ref([
     }
   }
 
-  // Media Queries
   @media (max-width: 768px) {
     & {
       padding: 3rem 2rem;

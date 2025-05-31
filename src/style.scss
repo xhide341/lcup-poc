@@ -73,13 +73,13 @@ h6 {
   isolation: isolate;
 }
 
-// Variables
+// public variables
 $viewport-size: min(100dvh, 100dvw, 800px);
 $primary-color: rgba(7, 63, 119, 0.95);
 $body-color: #f8f9fa;
 $section-font: 2.5rem;
 
-// Hero section cutout variables - DEFAULT VALUES (desktop)
+// hero section variables
 $radius: 16px;
 $inner-curve-size: 20px;
 $horizontal-offset: 56.5em;
@@ -87,9 +87,8 @@ $vertical-offset: 12em;
 $mask-dimension: 2 * $radius;
 $inner-dimension: $inner-curve-size + $radius;
 
-// We'll use these mixins in the component instead of media queries for the variables
+// mixins
 @mixin hero-large-desktop {
-  // Default values are already set above, no changes needed
 }
 
 @mixin hero-desktop {

@@ -1,7 +1,6 @@
 <script>
-// Import Swiper Vue.js components
 import { Swiper, SwiperSlide } from "swiper/vue";
-// Import Swiper modules
+
 import { Pagination, Autoplay } from "swiper/modules";
 
 import "swiper/scss";
@@ -65,7 +64,7 @@ export default {
   text-align: center;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
-  width: 100%; /* Consistent width for cards in swiper */
+  width: 100%;
   max-width: 300px;
   height: 100%;
 
