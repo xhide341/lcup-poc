@@ -9,6 +9,7 @@ import bagongPilipinasLogo from "../../assets/logos/bagong-pilipinas-logo.webp";
 import heroBgDesktop from "../../assets/backgrounds/university-people.webp";
 import { ref, onMounted, onUnmounted } from "vue";
 import AchievementsCard from "./AchievementsCard.vue";
+import { useAnimatedNumber } from "../../composables/useAnimatedNumber";
 
 const shouldReduceMotion = useReducedMotion();
 
@@ -22,8 +23,9 @@ interface Announcement {
 interface Achievement {
   id: number;
   title: string;
-  value: string;
+  value: number;
   description: string;
+  suffix: string;
 }
 
 const logos = [npcLogo, iso9001Logo, depedLogo, chedLogo, pacucoaLogo, bagongPilipinasLogo];
@@ -53,58 +55,62 @@ const achievements: Achievement[] = [
   {
     id: 1,
     title: "1st Placers",
-    value: "127+",
+    value: 127,
     description: "Board exam top performers",
+    suffix: "+",
   },
   {
     id: 2,
     title: "Top Notchers",
-    value: "93%",
+    value: 93,
     description: "Above average passing rate",
+    suffix: "%",
   },
   {
     id: 3,
     title: "Local Ranking",
-    value: "#3",
+    value: 6,
     description: "Among regional universities",
+    suffix: "+",
   },
   {
     id: 4,
-    title: "Scholarship",
-    value: "850+",
+    title: "Scholarships",
+    value: 850,
     description: "Awarded academic merit",
+    suffix: "+",
   },
 ];
 
+const animatedValues = achievements.map((a) => useAnimatedNumber(a.value, { suffix: a.suffix }));
+
+// preloading the image
 const isImgLoaded = ref(false);
 const heroImgLoaded = () => {
   isImgLoaded.value = true;
 };
 
+// check size for swiper
 const isMobile = ref(false);
 const checkMobile = () => {
-  // Using 576px as the breakpoint for the swiper
   isMobile.value = window.innerWidth <= 576;
 };
 
 onMounted(() => {
-  // Preload the hero background image
+  // preload images
   const img = new Image();
   img.src = heroBgDesktop;
   img.onload = heroImgLoaded;
-
-  // If image is already cached, it might be loaded immediately
   if (img.complete) {
     heroImgLoaded();
   }
 
-  // Check mobile on mount and on resize
+  // check size
   checkMobile();
   window.addEventListener("resize", checkMobile);
 });
 
 onUnmounted(() => {
-  // Remove resize listener when component is unmounted
   window.removeEventListener("resize", checkMobile);
 });
 </script>
@@ -193,7 +199,7 @@ onUnmounted(() => {
           tabindex="0"
           :aria-label="`${achievement.title}, ${achievement.value}. ${achievement.description}`"
         >
-          <div class="achievement-value">{{ achievement.value }}</div>
+          <div class="achievement-value">{{ animatedValues[index] }}</div>
           <h4>{{ achievement.title }}</h4>
           <p>{{ achievement.description }}</p>
         </motion.div>
@@ -843,7 +849,6 @@ main {
       display: none;
     }
 
-    /* styles for the AchievementsCard component (Swiper) on smallest mobile */
     .swiper {
       display: block;
       width: 100%;
