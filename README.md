@@ -1,7 +1,5 @@
 # 🕰️ LCUP - Proof of Concept
 
-## 🎯 Project Overview
-
 LCUP - Proof of Concept is a simple proof of concept for a university's landing page.
 
 ## 🛠️ Tech Stack
@@ -14,12 +12,12 @@ LCUP - Proof of Concept is a simple proof of concept for a university's landing 
 ## 🏗️ Architecture
 
 .
-├── src/ # Source files (components/assets/composables)
-├── public/ # Static assets
-├── index.html # Entry point
-├── package.json # Project dependencies
-├── pnpm-lock.yaml # Lock file
-├── README.md # Project information
+├── src/
+├── public/
+├── index.html
+├── package.json
+├── pnpm-lock.yaml
+├── README.md
 
 ## Installation
 
@@ -40,7 +38,7 @@ To get the project up and running locally, follow these steps:
 
 ## 💡 Learning Outcomes
 
-- Familiriazed myself with Vue, especially with the RouterView feature.
+- Familiarized myself with Vue, especially with the Router feature.
 - Learned SASS/SCSS, I find the class nesting, variable naming, and mixins very useful.
 
 ## 📝 Development Notes
