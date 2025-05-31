@@ -1,20 +1,10 @@
 <template>
   <div class="about-card">
-    <h1>leadership</h1>
-    <h2>university president</h2>
-    <p>sister maria consolata, osa</p>
-    <h2>vice presidents</h2>
-    <ul>
-      <li>dr. juan dela cruz - academic affairs</li>
-      <li>dr. maria santos - administration</li>
-      <li>mr. jose reyes - student services</li>
-    </ul>
+    <h1>Leadership</h1>
   </div>
 </template>
 
-<script setup lang="ts">
-// no script needed for static content
-</script>
+<script setup lang="ts"></script>
 
 <style scoped>
 .about-card {

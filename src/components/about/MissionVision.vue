@@ -1,22 +1,10 @@
 <template>
   <div class="about-card">
-    <h1>mission & vision</h1>
-    <h2>our mission</h2>
-    <p>
-      to provide quality, catholic, and transformative education that forms competent,
-      compassionate, and committed individuals.
-    </p>
-    <h2>our vision</h2>
-    <p>
-      la consolacion university philippines envisions itself as a leading catholic educational
-      institution, fostering academic excellence and social responsibility.
-    </p>
+    <h1>Mission & Vision</h1>
   </div>
 </template>
 
-<script setup lang="ts">
-// no script needed for static content
-</script>
+<script setup lang="ts"></script>
 
 <style scoped>
 .about-card {

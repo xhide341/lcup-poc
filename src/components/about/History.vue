@@ -1,17 +1,10 @@
 <template>
   <div class="about-card">
-    <h1>history</h1>
-    <p>
-      founded in 1937, la consolacion university philippines has a rich legacy of academic
-      excellence and service to the community. over the decades, it has grown into a premier
-      institution, guided by augustinian values and a commitment to holistic education.
-    </p>
+    <h1>History</h1>
   </div>
 </template>
 
-<script setup lang="ts">
-// no script needed for static content
-</script>
+<script setup lang="ts"></script>
 
 <style scoped>
 .about-card {
@@ -26,7 +19,7 @@
 h1 {
   font-size: 2rem;
   margin-bottom: 1.5rem;
-  color: #2a3a4b;
+  color: #2a3a3b;
 }
 p {
   font-size: 1rem;

@@ -1,5 +1,54 @@
-# Vue 3 + TypeScript + Vite
+# 🕰️ LCUP - Proof of Concept
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+## 🎯 Project Overview
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+LCUP - Proof of Concept is a simple proof of concept for a university's landing page.
+
+## 🛠️ Tech Stack
+
+- Vue
+- TypeScript
+- SASS/SCSS
+- Vite
+
+## 🏗️ Architecture
+
+.
+├── src/ # Source files (components/assets/composables)
+├── public/ # Static assets
+├── index.html # Entry point
+├── package.json # Project dependencies
+├── pnpm-lock.yaml # Lock file
+├── README.md # Project information
+
+## Installation
+
+To get the project up and running locally, follow these steps:
+
+1.  Clone the repository:
+    ```bash
+    git clone https://github.com/xhide341/lcup-poc
+    ```
+2.  Navigate to the project directory:
+    ```bash
+    cd lcup-poc
+    ```
+3.  Install dependencies using pnpm:
+    ```bash
+    pnpm install
+    ```
+
+## 💡 Learning Outcomes
+
+- Familiriazed myself with Vue, especially with the RouterView feature.
+- Learned SASS/SCSS, I find the class nesting, variable naming, and mixins very useful.
+
+## 📝 Development Notes
+
+- I would love to use vue again but this time with a framework like Nuxt.
+- SASS/SCSS is an awesome experience, though I still find tailwind easier to use.
+- Depending on the project needs, SASS is way better than vanilla css especially if required with more control.
+
+## 🚀 Deployment
+
+https://lcup-poc.pages.dev/

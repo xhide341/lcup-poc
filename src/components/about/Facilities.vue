@@ -1,13 +1,6 @@
 <template>
   <div class="about-card">
-    <h1>facilities</h1>
-    <ul>
-      <li>modern classrooms and laboratories</li>
-      <li>university library</li>
-      <li>sports complex</li>
-      <li>student center</li>
-      <li>chapel</li>
-    </ul>
+    <h1>Facilities</h1>
   </div>
 </template>
 
